@@ -70,7 +70,8 @@ class ChainingHashTable:
             index += 1
         s += "   --------"
         return s
-
+##Load factor is calculated by dividing the number of elements in the table
+##over the size of the table. Returns variable lambda.
     def calcLoadFactor(self):
         count=0
         for bucket in self.table:
@@ -78,17 +79,21 @@ class ChainingHashTable:
                 count=count+len(bucket)
         lam=count/len(self.table)       
         return lam
-
+##Calculates the average of comparisons of the table.
+##The formula used is avg = 1+(lambda/2).
     def calcAvg(self):
         lam = self.calcLoadFactor()
         avg = 1 + (lam/2)
         return avg
-    
+##Function calcEmbed calculates the similarity between two
+##given words using the embedding and  
 ##formula (e_0 (dot product) e_1) / |e_0| (magnitude of e_0) * |e_1| (magnitude of e_1)
 def calcEmbed(file, hashTable):
     for line in file:
         data=line.split()
-        found1=hashTable.search(data[0])    
+        
+        found1=hashTable.search(data[0])
+
         found2=hashTable.search(data[1])
         e0=found1[1]
         e1=found2[1]
@@ -105,7 +110,9 @@ def calcEmbed(file, hashTable):
         down=mag1*mag2
         sim=top/down
         print(data[0],data[1],sim)
-
+##Function createHashTable creates the table with the given file with
+##words embedding. Prints the table, similarities, load factor, and
+##average of comparisons.
 def createHashTable(file):
     chaining = ChainingHashTable()
     for line in file:
@@ -115,7 +122,10 @@ def createHashTable(file):
                 embed=[]
                 for i in range (1,len(data)):
                     embed.append(data[i])
+                #t1_start = time.perf_counter()
                 chaining.insert(word,embed)
+                #t1_stop = time.perf_counter()
+                #print("Elapsed time:", ((t1_stop-t1_start)/1000000000),"seconds")
     print ("Chaining: initial table:")
     #print (chaining)
     embedFile=open("embed.txt")
